@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARK DEVIL | Loading</title>
+    <style>
+        /* تصميم الخلفية السوداء */
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #FFC107; /* اللون الأصفر كما في الصورة */
+        }
+
+        /* تنسيق اسم DARK DEVIL */
+        h1 {
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        /* تصميم الدائرة المتحركة */
+        .loader {
+            border: 4px solid rgba(255, 193, 7, 0.1); /* خلفية الدائرة باهتة */
+            border-top: 4px solid #FFC107; /* الجزء المتحرك بلون ذهبي */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* أنيميشن الدوران */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>DARK DEVIL</h1>
+    <div class="loader"></div>
+
+    <script>
+        // الانتقال لصفحة s.html بعد 3 ثواني
+        setTimeout(function() {
+            window.location.href = "s.html"; 
+        }, 3000); 
+    </script>
+
+</body>
+</html>
