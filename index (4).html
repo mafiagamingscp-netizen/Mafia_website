@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Miner Terminal</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* شاشة الديسكتوب */
+        #desktop {
+            flex-grow: 1;
+            padding: 20px;
+            position: relative;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/NSA_seal.svg/1200px-NSA_seal.svg.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 300px;
+            opacity: 0.8;
+        }
+
+        .icon-grid {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 100px);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .icon {
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .icon img {
+            width: 40px;
+            display: block;
+            margin: 0 auto 5px;
+        }
+
+        /* نافذة الماينر */
+        .window {
+            border: 1px solid #00ff00;
+            background: rgba(0, 0, 0, 0.9);
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            display: none;
+            flex-direction: column;
+        }
+
+        .window-header {
+            background: #00ff00;
+            color: #000;
+            padding: 5px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .window-body {
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        /* منطقة الأكواد */
+        #code-stream {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        /* زر البدء */
+        .btn-start {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 20px;
+            margin: 100px auto;
+            display: block;
+        }
+
+        /* فورم الدفع */
+        #payment-section {
+            display: none;
+            border: 2px dashed #00ff00;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        input {
+            background: transparent;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 5px;
+            width: 100%;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        .status-bar {
+            background: #00ff00;
+            color: #000;
+            padding: 2px 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #code-input { margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div id="desktop">
+    <div class="icon-grid">
+        <div class="icon" onclick="openMiner()">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968260.png" alt="folder">
+            Bitcoin Miner
+        </div>
+        <div class="icon"><img src="https://cdn-icons-png.flaticon.com/512/716/716429.png"> Password</div>
+        <div class="icon"><img src="https://cdn-icons-png.flaticon.com/512/2892/2892208.png"> Compiler</div>
+        <div class="icon"><img src="https://cdn-icons-png.flaticon.com/512/1067/1067256.png"> Nuclear</div>
+    </div>
+
+    <button class="btn-start" id="start-btn" onclick="openMiner()">Start Mining</button>
+
+    <div class="window" id="miner-window">
+        <div class="window-header">
+            <span>Bitcoin Miner Terminal v1.0</span>
+            <span>_ □ X</span>
+        </div>
+        <div class="window-body" id="window-body">
+            <div id="code-stream"></div>
+            
+            <div id="secret-prompt">
+                <p>> Enter Access Key to Unlock Wallet:</p>
+                <input type="text" id="secret-key" placeholder="Paste code here..." oninput="checkKey()">
+            </div>
+
+            <div id="payment-section">
+                <h3 style="color: yellow;">SYSTEM UNLOCKED - WALLET READY</h3>
+                <p>رقم الاشتراك (لتحويل الأموال): <strong style="font-size: 1.2em;">01210931358</strong></p>
+                <hr>
+                <label>الرقم الذي حولت منه:</label>
+                <input type="text" id="sender-number" placeholder="01xxxxxxxxx">
+                <label>المبلغ المحول:</label>
+                <input type="number" id="amount" placeholder="EGP">
+                <button onclick="submitOrder()" style="background: yellow; color: black; font-weight: bold; width: 100%; padding: 10px; border:none; cursor:pointer;">تم التحويل</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="status-bar">
+    <span>Start | Bitcoin Miner | Ads | Console</span>
+    <span>Privacy & Security [ACTIVE]</span>
+</div>
+
+<script>
+    const codeStream = document.getElementById('code-stream');
+    const secretKey = "ALMEUNHREF138_71`hwiwoqVtqv";
+    
+    // مصفوفة أكواد عشوائية للتمثيل
+    const hackerText = [
+        "Connecting to btc.miner.bitcoin-heap.com...",
+        "Block identified: ...7e9Nq@002 Diff: 167M",
+        "Penetrating secure layer... OK",
+        "Compiling binary modules...",
+        "Fetching remote addresses...",
+        "No match found for Ke837. Retrying...",
+        "Success! Hash found: 00000000000000000005d",
+        "Transferring bits to buffer...",
+        "Warning: Connection unstable.",
+        "System Override [Enabled]"
+    ];
+
+    function openMiner() {
+        document.getElementById('start-btn').style.display = 'none';
+        document.getElementById('miner-window').style.display = 'flex';
+        startMiningAnimation();
+    }
+
+    function startMiningAnimation() {
+        let i = 0;
+        const interval = setInterval(() => {
+            const line = document.createElement('div');
+            line.textContent = hackerText[Math.floor(Math.random() * hackerText.length)];
+            codeStream.appendChild(line);
+            
+            // سكرول تلقائي للأسفل
+            document.getElementById('window-body').scrollTop = document.getElementById('window-body').scrollHeight;
+            
+            if (codeStream.children.length > 50) codeStream.removeChild(codeStream.firstChild);
+        }, 300);
+    }
+
+    function checkKey() {
+        const input = document.getElementById('secret-key').value;
+        if (input === secretKey) {
+            document.getElementById('secret-prompt').style.display = 'none';
+            document.getElementById('payment-section').style.display = 'block';
+            document.getElementById('code-stream').innerHTML = "<p style='color: yellow'>ACCESS GRANTED. PAYMENT MODULE LOADED.</p>";
+        }
+    }
+
+    function submitOrder() {
+        const num = document.getElementById('sender-number').value;
+        const amt = document.getElementById('amount').value;
+        if(num && amt) {
+            alert("تم إنشاء الطلب بنجاح! جاري مراجعة التحويل.");
+            location.reload(); // إعادة تشغيل الموقع
+        } else {
+            alert("يرجى ملء كافة البيانات");
+        }
+    }
+</script>
+
+</body>
+</html>
